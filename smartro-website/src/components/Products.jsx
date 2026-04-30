@@ -1,162 +1,104 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
-const plans = [
+const products = [
   {
     id: 1,
-    name: 'Starter Plan',
-    tagline: 'Perfect for individuals & couples',
-    price: '₹599',
-    period: '28 Days',
-    water: '900',
-    perLitre: '0.67',
-    color: '#0ea5e9',
+    name: 'Aqua Imperial RO',
+    tagline: 'Best for renters and budget-friendly plans',
+    specs: ['Storage Tank of 6.5L Capacity', 'Essential minerals', 'Wall-mount or countertop'],
+    shortTermPrice: '₹399',
+    longTermPrice: '₹349',
+    lockIn: '3 Months Lock-In',
     badge: null,
-    popular: false,
-    features: [
-      '900 Litres of purified water',
-      'Valid for 28 days',
-      'Free installation',
-      '7-Stage RO+UV filtration',
-      'Live TDS monitoring',
-      'On-call service support',
-    ],
+    color: '#0891B2',
     icon: (
-      <svg width="52" height="70" viewBox="0 0 52 70" fill="none">
-        <path d="M26 2C26 2 8 22 8 38C8 47.941 16.059 56 26 56C35.941 56 44 47.941 44 38C44 22 26 2 26 2Z" fill="url(#planBlue)" />
-        <path d="M18 36C18 36 20 31 26 29" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-        <defs>
-          <linearGradient id="planBlue" x1="26" y1="2" x2="26" y2="56" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#7dd3fc" /><stop offset="1" stopColor="#0284c7" />
-          </linearGradient>
-        </defs>
+      <svg width="48" height="64" viewBox="0 0 48 64" fill="none">
+        <path d="M24 2C24 2 6 20 6 34C6 43.941 14.059 52 24 52C33.941 52 42 43.941 42 34C42 20 24 2 24 2Z" fill="url(#p1)"/>
+        <path d="M16 32C16 32 18 28 24 26" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+        <defs><linearGradient id="p1" x1="24" y1="2" x2="24" y2="52"><stop stopColor="#67E8F9"/><stop offset="1" stopColor="#0891B2"/></linearGradient></defs>
       </svg>
     ),
   },
   {
     id: 2,
-    name: 'Family Plan',
-    tagline: 'Most popular — great value for families',
-    price: '₹999',
-    period: '3 Months',
-    water: '1500',
-    perLitre: '0.67',
-    color: '#0369a1',
-    badge: 'MOST POPULAR',
-    popular: true,
-    features: [
-      '1500 Litres of purified water',
-      'Valid for 3 months (90 days)',
-      'Free installation & setup',
-      '7-Stage RO+UV+UF filtration',
-      'Smart TDS display',
-      'Priority customer support',
-      'Free filter health checkup',
-    ],
+    name: 'Aqua Imperial Copper',
+    tagline: 'For those chasing the extra immunity boost',
+    specs: ['Storage Tank of 8L Capacity', 'Essential minerals & Copper', 'Wall-mount or countertop'],
+    shortTermPrice: '₹449',
+    longTermPrice: '₹404',
+    lockIn: '3 Months Lock-In',
+    badge: 'BESTSELLER',
+    color: '#F59E0B',
     icon: (
-      <svg width="52" height="70" viewBox="0 0 52 70" fill="none">
-        <path d="M26 2C26 2 8 22 8 38C8 47.941 16.059 56 26 56C35.941 56 44 47.941 44 38C44 22 26 2 26 2Z" fill="url(#planDeep)" />
-        <path d="M18 36C18 36 20 31 26 29" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-        <circle cx="26" cy="38" r="6" fill="rgba(255,255,255,0.2)" />
-        <path d="M23 38L25 40L29 36" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-        <defs>
-          <linearGradient id="planDeep" x1="26" y1="2" x2="26" y2="56" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#38bdf8" /><stop offset="1" stopColor="#0369a1" />
-          </linearGradient>
-        </defs>
+      <svg width="48" height="64" viewBox="0 0 48 64" fill="none">
+        <path d="M24 2C24 2 6 20 6 34C6 43.941 14.059 52 24 52C33.941 52 42 43.941 42 34C42 20 24 2 24 2Z" fill="url(#p2)"/>
+        <circle cx="24" cy="34" r="6" fill="rgba(255,255,255,0.2)"/>
+        <path d="M21 34L23 36L27 32" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+        <defs><linearGradient id="p2" x1="24" y1="2" x2="24" y2="52"><stop stopColor="#FCD34D"/><stop offset="1" stopColor="#D97706"/></linearGradient></defs>
       </svg>
     ),
   },
   {
     id: 3,
-    name: 'Premium Plan',
-    tagline: 'Best savings for large families',
-    price: '₹1,899',
-    period: '6 Months',
-    water: '3000',
-    perLitre: '0.63',
-    color: '#06b6d4',
+    name: 'Aqua Imperial Alkaline',
+    tagline: 'For those seeking premium health & hydration',
+    specs: ['Storage Tank of 8L Capacity', 'Essential minerals & PH Booster', 'Wall-mount or countertop'],
+    shortTermPrice: '₹549',
+    longTermPrice: '₹495',
+    lockIn: '3 Months Lock-In',
     badge: 'BEST VALUE',
-    popular: false,
-    features: [
-      '3000 Litres of purified water',
-      'Valid for 6 months (180 days)',
-      'Free installation & setup',
-      '7-Stage RO+UV+UF+Mineral',
-      'Smart TDS & pH monitoring',
-      'Dedicated service engineer',
-      '2 Free filter replacements',
-      'Annual maintenance included',
-    ],
+    color: '#8B5CF6',
     icon: (
-      <svg width="52" height="70" viewBox="0 0 52 70" fill="none">
-        <path d="M26 2C26 2 8 22 8 38C8 47.941 16.059 56 26 56C35.941 56 44 47.941 44 38C44 22 26 2 26 2Z" fill="url(#planCyan)" />
-        <path d="M18 36C18 36 20 31 26 29" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-        <path d="M22 42C22 42 24 45 26 45C28 45 30 42 30 42" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-        <defs>
-          <linearGradient id="planCyan" x1="26" y1="2" x2="26" y2="56" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#67e8f9" /><stop offset="1" stopColor="#0891b2" />
-          </linearGradient>
-        </defs>
+      <svg width="48" height="64" viewBox="0 0 48 64" fill="none">
+        <path d="M24 2C24 2 6 20 6 34C6 43.941 14.059 52 24 52C33.941 52 42 43.941 42 34C42 20 24 2 24 2Z" fill="url(#p3)"/>
+        <path d="M20 40C20 40 22 43 24 43C26 43 28 40 28 40" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.6"/>
+        <defs><linearGradient id="p3" x1="24" y1="2" x2="24" y2="52"><stop stopColor="#C4B5FD"/><stop offset="1" stopColor="#7C3AED"/></linearGradient></defs>
+      </svg>
+    ),
+  },
+  {
+    id: 4,
+    name: 'Aqua Imperial Mineral+',
+    tagline: 'Made for low-TDS municipal water',
+    specs: ['Storage Tank of 6.5L Capacity', 'Essential minerals & Copper', 'Wall-mount or countertop'],
+    shortTermPrice: '₹499',
+    longTermPrice: '₹449',
+    lockIn: '3 Months Lock-In',
+    badge: null,
+    color: '#22C55E',
+    icon: (
+      <svg width="48" height="64" viewBox="0 0 48 64" fill="none">
+        <path d="M24 2C24 2 6 20 6 34C6 43.941 14.059 52 24 52C33.941 52 42 43.941 42 34C42 20 24 2 24 2Z" fill="url(#p4)"/>
+        <path d="M16 32C16 32 18 28 24 26" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+        <defs><linearGradient id="p4" x1="24" y1="2" x2="24" y2="52"><stop stopColor="#86EFAC"/><stop offset="1" stopColor="#16A34A"/></linearGradient></defs>
       </svg>
     ),
   },
 ];
 
-function WaterFillBar({ litres, maxLitres, color, active }) {
-  const pct = Math.round((litres / maxLitres) * 100);
-  return (
-    <div style={{ marginBottom: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-        <span style={{ fontSize: '11px', fontWeight: 600, color: active ? 'rgba(255,255,255,0.5)' : '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-          Water Volume
-        </span>
-        <span style={{ fontSize: '12px', fontWeight: 700, color: active ? '#38bdf8' : color }}>
-          {litres}L
-        </span>
-      </div>
-      <div style={{
-        height: '8px', borderRadius: '4px',
-        background: active ? 'rgba(255,255,255,0.1)' : 'rgba(14,165,233,0.1)',
-        overflow: 'hidden', position: 'relative',
-      }}>
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${pct}%` }}
-          transition={{ duration: 1.2, ease: 'easeOut', delay: 0.3 }}
-          style={{
-            height: '100%',
-            background: `linear-gradient(90deg, ${color}, #38bdf8)`,
-            borderRadius: '4px',
-            boxShadow: `0 0 8px ${color}80`,
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
 export default function Products() {
-  const [selected, setSelected] = useState(2);
+  const [planType, setPlanType] = useState('long');
+  const [hoveredId, setHoveredId] = useState(null);
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
 
   return (
     <section
       id="products"
-      style={{ padding: '100px 0', background: '#f0f9ff', position: 'relative', overflow: 'hidden' }}
+      style={{ padding: '100px 0', background: '#F8FFFE', position: 'relative', overflow: 'hidden' }}
     >
       {/* BG orbs */}
       <div style={{
         position: 'absolute', top: '10%', left: '-80px',
         width: '400px', height: '400px', borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(14,165,233,0.07) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(8,145,178,0.05) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
       <div style={{
         position: 'absolute', bottom: '10%', right: '-80px',
         width: '350px', height: '350px', borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(6,182,212,0.07) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(34,211,238,0.05) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
@@ -167,269 +109,291 @@ export default function Products() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          style={{ textAlign: 'center', marginBottom: '64px' }}
+          style={{ textAlign: 'center', marginBottom: '48px' }}
         >
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '8px',
-            background: 'rgba(14,165,233,0.08)', border: '1px solid rgba(14,165,233,0.2)',
+            background: 'rgba(8,145,178,0.06)', border: '1px solid rgba(8,145,178,0.15)',
             borderRadius: '25px', padding: '6px 16px', marginBottom: '16px',
           }}>
-            <span style={{ color: '#0ea5e9', fontSize: '13px', fontWeight: 600 }}>Water Plans</span>
+            <span style={{ color: '#0891B2', fontSize: '13px', fontWeight: 600 }}>Our Products</span>
           </div>
           <h2 style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: 'clamp(28px, 4vw, 42px)',
-            fontWeight: 800, color: '#0c1a2e', marginBottom: '16px',
+            fontWeight: 800, color: '#0F172A', marginBottom: '16px',
+            letterSpacing: '-0.5px',
           }}>
-            Simple, Affordable Water Plans
+            Products That Fit Every Lifestyle & Budget
           </h2>
-          <p style={{ color: '#64748b', fontSize: '17px', maxWidth: '540px', margin: '0 auto', lineHeight: 1.7 }}>
-            Pay only for the pure water you need. No hidden charges, no maintenance headaches — SmartRO takes care of everything.
+          <p style={{ color: '#64748B', fontSize: '17px', maxWidth: '600px', margin: '0 auto 32px', lineHeight: 1.7 }}>
+            Each of our smart water purifiers comes with advanced multi-stage purification and IoT technology.
           </p>
 
-          {/* Value callout */}
+          {/* Plan toggle */}
           <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            background: 'rgba(14,165,233,0.06)', border: '1px dashed rgba(14,165,233,0.3)',
-            borderRadius: '12px', padding: '10px 20px', marginTop: '20px',
-            color: '#0369a1', fontSize: '14px', fontWeight: 600,
+            display: 'inline-flex',
+            background: '#ffffff',
+            borderRadius: '14px',
+            padding: '4px',
+            border: '1px solid rgba(8,145,178,0.12)',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
           }}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="#0ea5e9">
-              <path d="M8 1C8 1 3 7 3 11C3 13.761 5.239 16 8 16C10.761 16 13 13.761 13 11C13 7 8 1 8 1Z"/>
-            </svg>
-            Pure RO water starting at just ₹0.63 per litre — cheaper than a water bottle!
+            <button
+              onClick={() => setPlanType('short')}
+              style={{
+                padding: '10px 24px',
+                borderRadius: '10px',
+                border: 'none',
+                background: planType === 'short' ? 'linear-gradient(135deg, #0891B2, #0E7490)' : 'transparent',
+                color: planType === 'short' ? 'white' : '#64748B',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '14px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.25s',
+              }}
+            >
+              Flexible Short-term Plans
+            </button>
+            <button
+              onClick={() => setPlanType('long')}
+              style={{
+                padding: '10px 24px',
+                borderRadius: '10px',
+                border: 'none',
+                background: planType === 'long' ? 'linear-gradient(135deg, #0891B2, #0E7490)' : 'transparent',
+                color: planType === 'long' ? 'white' : '#64748B',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '14px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.25s',
+              }}
+            >
+              Long-term Value Plans
+            </button>
+          </div>
+          <div style={{ color: '#94A3B8', fontSize: '12px', marginTop: '10px' }}>
+            {planType === 'short' ? 'Flexible plans suitable for renters on-the-go (28/90/180 days)' : 'Save more with annual subscriptions — best value for families'}
           </div>
         </motion.div>
 
-        {/* Plan cards */}
+        {/* Product cards */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '24px',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+          gap: '20px',
           alignItems: 'start',
         }}>
-          {plans.map((plan, i) => (
-            <motion.div
-              key={plan.id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.15 }}
-              onClick={() => setSelected(plan.id)}
-              style={{
-                background: selected === plan.id
-                  ? 'linear-gradient(155deg, #0c1a2e 0%, #0a2540 60%, #073260 100%)'
-                  : '#ffffff',
-                borderRadius: '28px',
-                padding: '36px 28px',
-                border: `2px solid ${selected === plan.id ? plan.color : 'rgba(14,165,233,0.12)'}`,
-                cursor: 'pointer',
-                transition: 'all 0.35s ease',
-                boxShadow: selected === plan.id
-                  ? `0 24px 64px ${plan.color}30, 0 0 0 1px ${plan.color}40`
-                  : '0 4px 24px rgba(0,0,0,0.06)',
-                transform: selected === plan.id ? 'translateY(-10px) scale(1.02)' : 'none',
-                position: 'relative',
-                overflow: 'hidden',
-              }}
-            >
-              {/* Glow bg on selected */}
-              {selected === plan.id && (
-                <div style={{
-                  position: 'absolute', top: '-60px', right: '-60px',
-                  width: '200px', height: '200px', borderRadius: '50%',
-                  background: `radial-gradient(circle, ${plan.color}25 0%, transparent 70%)`,
-                  pointerEvents: 'none',
-                }} />
-              )}
+          {products.map((product, i) => {
+            const isHovered = hoveredId === product.id;
+            const price = planType === 'short' ? product.shortTermPrice : product.longTermPrice;
 
-              {/* Badge */}
-              {plan.badge && (
-                <div style={{
-                  position: 'absolute', top: '18px', right: '18px',
-                  background: `linear-gradient(135deg, ${plan.color}, #0c1a2e)`,
-                  color: 'white', fontSize: '10px', fontWeight: 700,
-                  padding: '5px 14px', borderRadius: '20px',
-                  letterSpacing: '1px',
-                  boxShadow: `0 4px 14px ${plan.color}50`,
-                }}>
-                  {plan.badge}
-                </div>
-              )}
-
-              {/* Water drop icon */}
-              <div style={{
-                display: 'flex', justifyContent: 'center', marginBottom: '20px',
-              }}>
-                <motion.div
-                  animate={selected === plan.id ? { y: [0, -12, 0] } : {}}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                  style={{
-                    width: '90px', height: '90px', borderRadius: '50%',
-                    background: selected === plan.id
-                      ? `rgba(${plan.color === '#0369a1' ? '3,105,161' : plan.color === '#06b6d4' ? '6,182,212' : '14,165,233'},0.15)`
-                      : `rgba(14,165,233,0.06)`,
-                    border: `2px solid ${selected === plan.id ? plan.color + '60' : 'rgba(14,165,233,0.1)'}`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: selected === plan.id ? `0 0 30px ${plan.color}30` : 'none',
-                  }}
-                >
-                  {plan.icon}
-                </motion.div>
-              </div>
-
-              {/* Plan name */}
-              <h3 style={{
-                fontFamily: 'Poppins, sans-serif',
-                fontSize: '22px', fontWeight: 800, textAlign: 'center',
-                color: selected === plan.id ? '#ffffff' : '#0c1a2e',
-                marginBottom: '4px',
-              }}>
-                {plan.name}
-              </h3>
-              <p style={{
-                color: selected === plan.id ? 'rgba(56,189,248,0.85)' : '#64748b',
-                fontSize: '13px', fontWeight: 500, textAlign: 'center',
-                marginBottom: '28px', lineHeight: 1.4,
-              }}>
-                {plan.tagline}
-              </p>
-
-              {/* Price block */}
-              <div style={{
-                background: selected === plan.id ? 'rgba(14,165,233,0.12)' : 'rgba(14,165,233,0.05)',
-                border: `1px solid ${selected === plan.id ? plan.color + '40' : 'rgba(14,165,233,0.12)'}`,
-                borderRadius: '16px', padding: '20px',
-                textAlign: 'center', marginBottom: '24px',
-              }}>
-                <div style={{
-                  fontFamily: 'Poppins, sans-serif',
-                  fontSize: 'clamp(42px, 6vw, 52px)',
-                  fontWeight: 900, lineHeight: 1,
-                  color: selected === plan.id ? '#38bdf8' : plan.color,
-                }}>
-                  {plan.price}
-                </div>
-                <div style={{
-                  color: selected === plan.id ? 'rgba(255,255,255,0.6)' : '#64748b',
-                  fontSize: '14px', fontWeight: 500, marginTop: '6px',
-                }}>
-                  for {plan.period}
-                </div>
-
-                {/* Spec row */}
-                <div style={{
-                  display: 'flex', justifyContent: 'center', gap: '20px',
-                  marginTop: '14px', paddingTop: '14px',
-                  borderTop: `1px solid ${selected === plan.id ? 'rgba(255,255,255,0.08)' : 'rgba(14,165,233,0.1)'}`,
-                }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ color: selected === plan.id ? '#38bdf8' : plan.color, fontWeight: 800, fontSize: '18px', fontFamily: 'Poppins, sans-serif' }}>
-                      {plan.water}L
-                    </div>
-                    <div style={{ color: selected === plan.id ? 'rgba(255,255,255,0.45)' : '#94a3b8', fontSize: '10px', fontWeight: 600, textTransform: 'uppercase' }}>
-                      Total Water
-                    </div>
-                  </div>
-                  <div style={{ width: '1px', background: selected === plan.id ? 'rgba(255,255,255,0.1)' : 'rgba(14,165,233,0.1)' }} />
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ color: selected === plan.id ? '#38bdf8' : plan.color, fontWeight: 800, fontSize: '18px', fontFamily: 'Poppins, sans-serif' }}>
-                      ₹{plan.perLitre}
-                    </div>
-                    <div style={{ color: selected === plan.id ? 'rgba(255,255,255,0.45)' : '#94a3b8', fontSize: '10px', fontWeight: 600, textTransform: 'uppercase' }}>
-                      Per Litre
-                    </div>
-                  </div>
-                  <div style={{ width: '1px', background: selected === plan.id ? 'rgba(255,255,255,0.1)' : 'rgba(14,165,233,0.1)' }} />
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ color: selected === plan.id ? '#38bdf8' : plan.color, fontWeight: 800, fontSize: '18px', fontFamily: 'Poppins, sans-serif' }}>
-                      {plan.period}
-                    </div>
-                    <div style={{ color: selected === plan.id ? 'rgba(255,255,255,0.45)' : '#94a3b8', fontSize: '10px', fontWeight: 600, textTransform: 'uppercase' }}>
-                      Validity
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Water fill bar */}
-              <WaterFillBar
-                litres={parseInt(plan.water)}
-                maxLitres={3000}
-                color={plan.color}
-                active={selected === plan.id}
-              />
-
-              {/* Features */}
-              <ul style={{ listStyle: 'none', marginBottom: '28px' }}>
-                {plan.features.map((f) => (
-                  <li key={f} style={{
-                    display: 'flex', alignItems: 'flex-start', gap: '10px',
-                    marginBottom: '10px',
-                    color: selected === plan.id ? 'rgba(255,255,255,0.8)' : '#475569',
-                    fontSize: '13px', lineHeight: 1.4,
-                  }}>
-                    <svg style={{ flexShrink: 0, marginTop: '1px' }} width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <circle cx="8" cy="8" r="7" fill={plan.color} opacity="0.2" />
-                      <path d="M5 8L7 10L11 6" stroke={plan.color} strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              {/* CTA */}
-              <motion.button
-                whileHover={{ scale: 1.04, boxShadow: `0 12px 32px ${plan.color}60` }}
-                whileTap={{ scale: 0.96 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                }}
+            return (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 50 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: i * 0.12 }}
+                onMouseEnter={() => setHoveredId(product.id)}
+                onMouseLeave={() => setHoveredId(null)}
                 style={{
-                  width: '100%',
-                  background: selected === plan.id
-                    ? `linear-gradient(135deg, ${plan.color}, #0369a1)`
-                    : 'transparent',
-                  color: selected === plan.id ? 'white' : plan.color,
-                  border: `2px solid ${plan.color}`,
-                  padding: '14px',
-                  borderRadius: '14px',
-                  fontFamily: 'Poppins, sans-serif',
-                  fontWeight: 700, fontSize: '15px',
+                  background: isHovered
+                    ? 'linear-gradient(155deg, #0F172A 0%, #164E63 100%)'
+                    : '#ffffff',
+                  borderRadius: '24px',
+                  padding: '32px 24px',
+                  border: `1.5px solid ${isHovered ? product.color + '60' : 'rgba(8,145,178,0.1)'}`,
                   cursor: 'pointer',
-                  boxShadow: selected === plan.id ? `0 8px 24px ${plan.color}40` : 'none',
-                  transition: 'all 0.3s',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                  transition: 'all 0.35s ease',
+                  boxShadow: isHovered
+                    ? `0 20px 50px ${product.color}25, 0 0 0 1px ${product.color}30`
+                    : '0 2px 16px rgba(0,0,0,0.04)',
+                  transform: isHovered ? 'translateY(-8px)' : 'none',
+                  position: 'relative',
+                  overflow: 'hidden',
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                  <path d="M9 1C9 1 4 7 4 11C4 13.761 6.239 16 9 16C11.761 16 14 13.761 14 11C14 7 9 1 9 1Z"
-                    fill={selected === plan.id ? 'white' : plan.color} opacity="0.8" />
-                </svg>
-                Get This Plan
-              </motion.button>
-            </motion.div>
-          ))}
+                {/* Badge */}
+                {product.badge && (
+                  <div style={{
+                    position: 'absolute', top: '16px', right: '16px',
+                    background: `linear-gradient(135deg, ${product.color}, ${product.color}CC)`,
+                    color: 'white', fontSize: '9px', fontWeight: 800,
+                    padding: '4px 12px', borderRadius: '20px',
+                    letterSpacing: '1px',
+                    boxShadow: `0 4px 12px ${product.color}40`,
+                  }}>
+                    {product.badge}
+                  </div>
+                )}
+
+                {/* Water drop icon */}
+                <div style={{
+                  display: 'flex', justifyContent: 'center', marginBottom: '18px',
+                }}>
+                  <motion.div
+                    animate={isHovered ? { y: [0, -8, 0] } : {}}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{
+                      width: '80px', height: '80px', borderRadius: '50%',
+                      background: isHovered
+                        ? `${product.color}20`
+                        : `${product.color}08`,
+                      border: `1.5px solid ${isHovered ? product.color + '40' : product.color + '15'}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'all 0.3s',
+                    }}
+                  >
+                    {product.icon}
+                  </motion.div>
+                </div>
+
+                {/* Name */}
+                <h3 style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: '18px', fontWeight: 700, textAlign: 'center',
+                  color: isHovered ? '#ffffff' : '#0F172A',
+                  marginBottom: '4px',
+                  transition: 'color 0.3s',
+                }}>
+                  {product.name}
+                </h3>
+                <p style={{
+                  color: isHovered ? 'rgba(255,255,255,0.6)' : '#94A3B8',
+                  fontSize: '12px', fontWeight: 500, textAlign: 'center',
+                  marginBottom: '20px', lineHeight: 1.4,
+                  transition: 'color 0.3s',
+                }}>
+                  {product.tagline}
+                </p>
+
+                {/* Specs */}
+                <div style={{ marginBottom: '20px' }}>
+                  {product.specs.map((spec) => (
+                    <div key={spec} style={{
+                      display: 'flex', alignItems: 'center', gap: '8px',
+                      marginBottom: '8px',
+                      color: isHovered ? 'rgba(255,255,255,0.75)' : '#475569',
+                      fontSize: '13px',
+                      transition: 'color 0.3s',
+                    }}>
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+                        <circle cx="7" cy="7" r="6" fill={product.color} opacity="0.15"/>
+                        <path d="M4.5 7L6 8.5L9.5 5" stroke={product.color} strokeWidth="1.3" strokeLinecap="round"/>
+                      </svg>
+                      {spec}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Price */}
+                <div style={{
+                  background: isHovered ? 'rgba(255,255,255,0.06)' : `${product.color}06`,
+                  border: `1px solid ${isHovered ? 'rgba(255,255,255,0.08)' : product.color + '12'}`,
+                  borderRadius: '14px', padding: '16px',
+                  textAlign: 'center', marginBottom: '16px',
+                  transition: 'all 0.3s',
+                }}>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={planType}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <div style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: '36px', fontWeight: 800, lineHeight: 1,
+                        color: isHovered ? '#67E8F9' : product.color,
+                        transition: 'color 0.3s',
+                      }}>
+                        {price}
+                        <span style={{ fontSize: '14px', fontWeight: 500, color: isHovered ? 'rgba(255,255,255,0.5)' : '#94A3B8' }}>/mo</span>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+                  <div style={{
+                    color: isHovered ? 'rgba(255,255,255,0.4)' : '#94A3B8',
+                    fontSize: '11px', fontWeight: 600, marginTop: '6px',
+                    textTransform: 'uppercase', letterSpacing: '0.5px',
+                    transition: 'color 0.3s',
+                  }}>
+                    {product.lockIn}
+                  </div>
+                </div>
+
+                {/* Buttons */}
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    style={{
+                      flex: 1,
+                      background: 'transparent',
+                      color: isHovered ? 'rgba(255,255,255,0.8)' : '#64748B',
+                      border: `1.5px solid ${isHovered ? 'rgba(255,255,255,0.15)' : 'rgba(8,145,178,0.15)'}`,
+                      padding: '10px',
+                      borderRadius: '10px',
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: 600, fontSize: '13px',
+                      cursor: 'pointer',
+                      transition: 'all 0.25s',
+                    }}
+                  >
+                    Know more
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    style={{
+                      flex: 1,
+                      background: isHovered
+                        ? 'linear-gradient(135deg, #22C55E, #16A34A)'
+                        : `linear-gradient(135deg, ${product.color}, ${product.color}CC)`,
+                      color: 'white',
+                      border: 'none',
+                      padding: '10px',
+                      borderRadius: '10px',
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: 700, fontSize: '13px',
+                      cursor: 'pointer',
+                      boxShadow: isHovered ? '0 4px 16px rgba(34,197,94,0.4)' : `0 4px 12px ${product.color}30`,
+                      transition: 'all 0.25s',
+                    }}
+                  >
+                    Subscribe
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
-        {/* Bottom note */}
+        {/* Bottom features */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
           style={{
             textAlign: 'center', marginTop: '48px',
             display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '32px',
           }}
         >
           {[
-            { icon: '🚚', text: 'Free Installation' },
-            { icon: '🔧', text: 'No Maintenance Charges' },
-            { icon: '📞', text: '24/7 Support' },
-            { icon: '💧', text: '99.9% Pure Water' },
+            { text: 'Free Installation', icon: <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L2 6V13L9 17L16 13V6L9 2Z" fill="#0891B2" opacity="0.15"/><path d="M6 9L8 11L12 7" stroke="#0891B2" strokeWidth="1.5" strokeLinecap="round"/></svg> },
+            { text: 'No Maintenance Charges', icon: <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" fill="#0891B2" opacity="0.15"/><path d="M6 9L8 11L12 7" stroke="#0891B2" strokeWidth="1.5" strokeLinecap="round"/></svg> },
+            { text: '24/7 Support', icon: <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" fill="#0891B2" opacity="0.15"/><path d="M9 5V9L12 11" stroke="#0891B2" strokeWidth="1.5" strokeLinecap="round"/></svg> },
+            { text: '99.9% Pure Water', icon: <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 8 4 12C4 14.761 6.239 17 9 17C11.761 17 14 14.761 14 12C14 8 9 2 9 2Z" fill="#0891B2" opacity="0.15"/><path d="M7 11C7 11 8 9.5 9 9" stroke="#0891B2" strokeWidth="1.2" strokeLinecap="round"/></svg> },
           ].map((item) => (
             <div key={item.text} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', fontSize: '14px', fontWeight: 500 }}>
-              <span style={{ fontSize: '20px' }}>{item.icon}</span>
+              {item.icon}
               {item.text}
             </div>
           ))}

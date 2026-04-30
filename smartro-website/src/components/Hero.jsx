@@ -1,36 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
-function WaterDrop({ style }) {
-  return (
-    <motion.div
-      animate={{ y: [0, -25, 0], rotate: [0, 5, -5, 0] }}
-      transition={{ duration: 4 + Math.random() * 3, repeat: Infinity, ease: 'easeInOut' }}
-      style={{
-        position: 'absolute',
-        ...style,
-      }}
-    >
-      <svg width="40" height="50" viewBox="0 0 40 50" fill="none">
-        <path d="M20 0C20 0 4 18 4 30C4 39.941 11.163 48 20 48C28.837 48 36 39.941 36 30C36 18 20 0 20 0Z"
-          fill="url(#dropGrad)" opacity="0.7" />
-        <path d="M12 28C12 28 14 24 18 23" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-        <defs>
-          <linearGradient id="dropGrad" x1="20" y1="0" x2="20" y2="48" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#7dd3fc" />
-            <stop offset="100%" stopColor="#0284c7" />
-          </linearGradient>
-        </defs>
-      </svg>
-    </motion.div>
-  );
-}
+const highlights = [
+  { text: 'No upfront cost', icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#22C55E" strokeWidth="1.5"/><path d="M5 8L7 10L11 6" stroke="#22C55E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+  { text: 'Lifetime free maintenance', icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#22C55E" strokeWidth="1.5"/><path d="M5 8L7 10L11 6" stroke="#22C55E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+  { text: 'Easy monthly subscription', icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#22C55E" strokeWidth="1.5"/><path d="M5 8L7 10L11 6" stroke="#22C55E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+];
+
+const waterTypes = [
+  { label: 'RO Purified', color: '#0891B2' },
+  { label: 'Mineral Rich', color: '#22C55E' },
+  { label: 'Alkaline', color: '#8B5CF6' },
+  { label: 'Copper Infused', color: '#F59E0B' },
+];
 
 function Bubble({ size, left, delay, duration }) {
   return (
     <motion.div
       initial={{ y: '110vh', opacity: 0, scale: 0 }}
-      animate={{ y: '-10vh', opacity: [0, 0.6, 0.4, 0], scale: [0, 1, 1.1, 0.9] }}
+      animate={{ y: '-10vh', opacity: [0, 0.5, 0.3, 0], scale: [0, 1, 1.1, 0.9] }}
       transition={{ duration, delay, repeat: Infinity, ease: 'easeInOut' }}
       style={{
         position: 'absolute',
@@ -39,42 +27,36 @@ function Bubble({ size, left, delay, duration }) {
         width: size,
         height: size,
         borderRadius: '50%',
-        background: 'rgba(14,165,233,0.2)',
-        border: '1px solid rgba(56,189,248,0.4)',
-        backdropFilter: 'blur(2px)',
+        background: 'rgba(34,211,238,0.15)',
+        border: '1px solid rgba(34,211,238,0.3)',
       }}
     />
   );
 }
 
-const bubbles = Array.from({ length: 15 }, (_, i) => ({
+const bubbles = Array.from({ length: 12 }, (_, i) => ({
   id: i,
-  size: `${10 + Math.random() * 30}px`,
+  size: `${10 + Math.random() * 25}px`,
   left: Math.random() * 100,
   delay: Math.random() * 8,
-  duration: 6 + Math.random() * 6,
+  duration: 7 + Math.random() * 6,
 }));
 
 export default function Hero() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [activeType, setActiveType] = useState(0);
   const heroRef = useRef(null);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        setMousePos({
-          x: (e.clientX - rect.left) / rect.width - 0.5,
-          y: (e.clientY - rect.top) / rect.height - 0.5,
-        });
-      }
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    const t = setInterval(() => setActiveType(p => (p + 1) % waterTypes.length), 2500);
+    return () => clearInterval(t);
   }, []);
 
   const handleEnquiry = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handlePlans = () => {
+    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -83,58 +65,31 @@ export default function Hero() {
       ref={heroRef}
       style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0c1a2e 0%, #0a2540 40%, #0369a1 80%, #0ea5e9 100%)',
+        background: 'linear-gradient(135deg, #0F172A 0%, #164E63 50%, #0891B2 100%)',
         position: 'relative',
         overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
       }}
     >
-      {/* Animated gradient orbs */}
-      <motion.div
-        animate={{
-          x: mousePos.x * 40,
-          y: mousePos.y * 40,
-        }}
-        transition={{ type: 'spring', stiffness: 50, damping: 20 }}
-        style={{
-          position: 'absolute',
-          top: '10%',
-          right: '10%',
-          width: '600px',
-          height: '600px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(14,165,233,0.3) 0%, transparent 70%)',
-          filter: 'blur(40px)',
-          pointerEvents: 'none',
-        }}
-      />
-      <motion.div
-        animate={{
-          x: mousePos.x * -30,
-          y: mousePos.y * -30,
-        }}
-        transition={{ type: 'spring', stiffness: 40, damping: 20 }}
-        style={{
-          position: 'absolute',
-          bottom: '20%',
-          left: '5%',
-          width: '400px',
-          height: '400px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(6,182,212,0.25) 0%, transparent 70%)',
-          filter: 'blur(60px)',
-          pointerEvents: 'none',
-        }}
-      />
+      {/* Gradient orbs */}
+      <div style={{
+        position: 'absolute', top: '5%', right: '5%',
+        width: '500px', height: '500px', borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(34,211,238,0.2) 0%, transparent 70%)',
+        filter: 'blur(60px)', pointerEvents: 'none',
+      }} />
+      <div style={{
+        position: 'absolute', bottom: '10%', left: '5%',
+        width: '400px', height: '400px', borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(8,145,178,0.2) 0%, transparent 70%)',
+        filter: 'blur(60px)', pointerEvents: 'none',
+      }} />
 
-      {/* Wave SVG at bottom */}
+      {/* Wave at bottom */}
       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, overflow: 'hidden', lineHeight: 0 }}>
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none" style={{ width: '200%', height: '120px', animation: 'waveAnim 10s linear infinite' }}>
-          <path d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.05)" />
-        </svg>
-        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" style={{ position: 'absolute', bottom: 0, width: '200%', height: '90px', animation: 'waveAnim 14s linear infinite reverse' }}>
-          <path d="M0,40 C360,100 720,0 1080,60 C1200,80 1320,20 1440,40 L1440,120 L0,120 Z" fill="rgba(14,165,233,0.08)" />
+          <path d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.04)" />
         </svg>
         <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{ position: 'absolute', bottom: 0, width: '100%', height: '80px' }}>
           <path d="M0,40 C360,80 720,0 1080,40 C1200,60 1320,20 1440,40 L1440,80 L0,80 Z" fill="#ffffff" />
@@ -146,15 +101,10 @@ export default function Hero() {
         {bubbles.map(b => <Bubble key={b.id} {...b} />)}
       </div>
 
-      {/* Floating drops */}
-      <WaterDrop style={{ top: '15%', left: '8%', opacity: 0.6 }} />
-      <WaterDrop style={{ top: '30%', right: '12%', opacity: 0.5, transform: 'scale(0.7)' }} />
-      <WaterDrop style={{ bottom: '25%', left: '15%', opacity: 0.4, transform: 'scale(0.5)' }} />
-
       {/* Grid lines */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'linear-gradient(rgba(14,165,233,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(14,165,233,0.05) 1px, transparent 1px)',
+        backgroundImage: 'linear-gradient(rgba(34,211,238,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.03) 1px, transparent 1px)',
         backgroundSize: '80px 80px',
       }} />
 
@@ -162,7 +112,7 @@ export default function Hero() {
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '120px 24px 80px',
+        padding: '120px 24px 100px',
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gap: '60px',
@@ -183,15 +133,15 @@ export default function Hero() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
-              background: 'rgba(14,165,233,0.15)',
-              border: '1px solid rgba(14,165,233,0.4)',
+              background: 'rgba(34,211,238,0.12)',
+              border: '1px solid rgba(34,211,238,0.3)',
               borderRadius: '25px',
               padding: '6px 16px',
               marginBottom: '24px',
             }}
           >
-            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#38bdf8', animation: 'pulse-glow 2s infinite' }} />
-            <span style={{ color: '#38bdf8', fontSize: '13px', fontWeight: 500 }}>India's #1 Smart Water Purifier</span>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22D3EE', animation: 'pulse-glow 2s infinite' }} />
+            <span style={{ color: '#67E8F9', fontSize: '13px', fontWeight: 600 }}>Smart Water Purifier on Rent</span>
           </motion.div>
 
           <motion.h1
@@ -199,51 +149,70 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
             style={{
-              fontFamily: 'Poppins, sans-serif',
+              fontFamily: "'DM Sans', sans-serif",
               fontSize: 'clamp(36px, 5vw, 62px)',
               fontWeight: 800,
               color: '#ffffff',
               lineHeight: 1.1,
-              marginBottom: '20px',
-              letterSpacing: '-1px',
+              marginBottom: '12px',
+              letterSpacing: '-1.5px',
             }}
           >
-            Pure Water,<br />
-            <span style={{ background: 'linear-gradient(90deg, #38bdf8, #06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Smart Living
+            AQUA IMPERIAL<br />
+            <span style={{ background: 'linear-gradient(90deg, #22D3EE, #0891B2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              RO ON RENT
             </span>
           </motion.h1>
+
+          {/* Highlights */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.35 }}
+            style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}
+          >
+            {highlights.map(h => (
+              <div key={h.text} style={{
+                display: 'flex', alignItems: 'center', gap: '6px',
+                color: 'rgba(255,255,255,0.85)', fontSize: '14px', fontWeight: 500,
+              }}>
+                {h.icon}
+                {h.text}
+              </div>
+            ))}
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.35 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
             style={{
-              color: 'rgba(255,255,255,0.75)',
-              fontSize: 'clamp(15px, 2vw, 18px)',
+              color: 'rgba(255,255,255,0.7)',
+              fontSize: 'clamp(15px, 2vw, 17px)',
               lineHeight: 1.7,
               marginBottom: '36px',
               maxWidth: '500px',
             }}
           >
-            Experience next-generation RO water purification with real-time TDS monitoring, AI-powered filtration, and smart connectivity. Safe, clean water for your family — always.
+            Experience next-generation RO water purification with real-time monitoring, 
+            IoT-connectivity, and hassle-free monthly subscription. Pure water for your family — always.
           </motion.p>
 
           {/* Stats row */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.45 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
             style={{ display: 'flex', gap: '32px', marginBottom: '36px', flexWrap: 'wrap' }}
           >
             {[
-              { value: '50K+', label: 'Happy Customers' },
+              { value: '10K+', label: 'Happy Families' },
               { value: '7-Stage', label: 'Purification' },
               { value: '99.9%', label: 'Pure Water' },
             ].map((stat) => (
               <div key={stat.label}>
-                <div style={{ color: '#38bdf8', fontWeight: 800, fontSize: '24px', fontFamily: 'Poppins, sans-serif' }}>{stat.value}</div>
-                <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: '12px', fontWeight: 500 }}>{stat.label}</div>
+                <div style={{ color: '#22D3EE', fontWeight: 800, fontSize: '24px', fontFamily: "'DM Sans', sans-serif" }}>{stat.value}</div>
+                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px', fontWeight: 500 }}>{stat.label}</div>
               </div>
             ))}
           </motion.div>
@@ -251,68 +220,66 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.55 }}
+            transition={{ duration: 0.7, delay: 0.6 }}
             style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}
           >
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(14,165,233,0.7)' }}
+              whileHover={{ scale: 1.05, boxShadow: '0 8px 32px rgba(34,197,94,0.6)' }}
               whileTap={{ scale: 0.95 }}
               onClick={handleEnquiry}
               style={{
-                background: 'linear-gradient(135deg, #0ea5e9, #06b6d4)',
+                background: 'linear-gradient(135deg, #22C55E, #16A34A)',
                 color: 'white',
                 border: 'none',
                 padding: '16px 36px',
-                borderRadius: '50px',
-                fontFamily: 'Poppins, sans-serif',
+                borderRadius: '12px',
+                fontFamily: "'DM Sans', sans-serif",
                 fontWeight: 700,
                 fontSize: '16px',
                 cursor: 'pointer',
-                boxShadow: '0 8px 30px rgba(14,165,233,0.4)',
-                animation: 'pulse-glow 3s infinite',
+                boxShadow: '0 8px 28px rgba(34,197,94,0.4)',
               }}
             >
-              Get Free Demo
+              Subscribe Now
             </motion.button>
             <motion.button
-              whileHover={{ scale: 1.05, background: 'rgba(14,165,233,0.15)' }}
+              whileHover={{ scale: 1.05, background: 'rgba(255,255,255,0.12)' }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={handlePlans}
               style={{
                 background: 'rgba(255,255,255,0.08)',
                 color: 'white',
-                border: '1.5px solid rgba(56,189,248,0.4)',
+                border: '1.5px solid rgba(34,211,238,0.4)',
                 padding: '16px 36px',
-                borderRadius: '50px',
-                fontFamily: 'Poppins, sans-serif',
+                borderRadius: '12px',
+                fontFamily: "'DM Sans', sans-serif",
                 fontWeight: 600,
                 fontSize: '16px',
                 cursor: 'pointer',
                 backdropFilter: 'blur(10px)',
               }}
             >
-              View Products
+              View Plans
             </motion.button>
           </motion.div>
         </div>
 
-        {/* Right: 3D Purifier Graphic */}
+        {/* Right: Purifier Graphic */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8, x: 60 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ duration: 0.9, delay: 0.3, ease: 'easeOut' }}
           style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}
         >
-          {/* Outer glow ring */}
+          {/* Rotating rings */}
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
             style={{
               position: 'absolute',
-              width: '360px', height: '360px',
-              borderRadius: '50%',
+              width: '340px', height: '340px', borderRadius: '50%',
               border: '2px solid transparent',
-              background: 'linear-gradient(90deg, rgba(14,165,233,0.4), transparent, rgba(6,182,212,0.4), transparent) border-box',
+              background: 'linear-gradient(90deg, rgba(8,145,178,0.4), transparent, rgba(34,211,238,0.4), transparent) border-box',
               WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
               WebkitMaskComposite: 'destination-out',
             }}
@@ -322,25 +289,23 @@ export default function Hero() {
             transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
             style={{
               position: 'absolute',
-              width: '300px', height: '300px',
-              borderRadius: '50%',
-              border: '1px dashed rgba(56,189,248,0.3)',
+              width: '280px', height: '280px', borderRadius: '50%',
+              border: '1px dashed rgba(34,211,238,0.2)',
             }}
           />
 
           {/* Purifier body */}
           <motion.div
-            animate={{ y: [0, -15, 0] }}
+            animate={{ y: [0, -12, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             style={{ position: 'relative', zIndex: 2 }}
           >
-            {/* Main unit */}
             <div style={{
               width: '200px',
-              background: 'linear-gradient(160deg, #e8f4f8 0%, #c8e6f0 40%, #a8d8ea 100%)',
-              borderRadius: '30px 30px 20px 20px',
-              padding: '30px 20px',
-              boxShadow: '0 30px 80px rgba(0,0,0,0.4), 0 0 40px rgba(14,165,233,0.3), inset 0 1px 0 rgba(255,255,255,0.8)',
+              background: 'linear-gradient(160deg, #e8f8fa 0%, #cceef4 40%, #a8e0ec 100%)',
+              borderRadius: '28px 28px 20px 20px',
+              padding: '28px 18px',
+              boxShadow: '0 30px 80px rgba(0,0,0,0.3), 0 0 40px rgba(8,145,178,0.2), inset 0 1px 0 rgba(255,255,255,0.8)',
               position: 'relative',
               overflow: 'hidden',
             }}>
@@ -352,35 +317,37 @@ export default function Hero() {
                 animation: 'shimmer 3s infinite',
               }} />
 
-              {/* Screen */}
-              <div style={{
-                background: '#0c1a2e',
-                borderRadius: '12px',
-                padding: '12px',
-                marginBottom: '20px',
-                border: '2px solid rgba(14,165,233,0.5)',
-                boxShadow: '0 0 20px rgba(14,165,233,0.3)',
-              }}>
-                <div style={{ color: '#38bdf8', fontSize: '10px', fontWeight: 600, marginBottom: '4px' }}>TDS LEVEL</div>
-                <div style={{ color: '#ffffff', fontSize: '28px', fontWeight: 800, fontFamily: 'monospace' }}>
-                  <CounterDisplay target={28} />
-                </div>
-                <div style={{ color: '#4ade80', fontSize: '9px', fontWeight: 500 }}>EXCELLENT QUALITY</div>
-                <div style={{
-                  marginTop: '8px', height: '4px', borderRadius: '2px',
-                  background: 'rgba(255,255,255,0.1)', overflow: 'hidden',
-                }}>
+              {/* Water Type Cycling */}
+              <div style={{ marginBottom: '14px', textAlign: 'center' }}>
+                <AnimatePresence mode="wait">
                   <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: '28%' }}
-                    transition={{ duration: 2, delay: 1 }}
-                    style={{ height: '100%', background: 'linear-gradient(90deg, #4ade80, #38bdf8)', borderRadius: '2px' }}
-                  />
-                </div>
+                    key={activeType}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.25 }}
+                    style={{
+                      background: `${waterTypes[activeType].color}15`,
+                      border: `1.5px solid ${waterTypes[activeType].color}40`,
+                      borderRadius: '10px',
+                      padding: '8px 12px',
+                      display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center',
+                    }}
+                  >
+                    <div style={{
+                      width: '10px', height: '10px', borderRadius: '50%',
+                      background: waterTypes[activeType].color,
+                      boxShadow: `0 0 8px ${waterTypes[activeType].color}`,
+                    }} />
+                    <span style={{ color: waterTypes[activeType].color, fontSize: '12px', fontWeight: 700 }}>
+                      {waterTypes[activeType].label}
+                    </span>
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
               {/* Filter stages */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {['Sediment', 'Carbon', 'RO Membrane', 'UV', 'Mineral'].map((stage, i) => (
                   <motion.div
                     key={stage}
@@ -389,53 +356,50 @@ export default function Hero() {
                     transition={{ delay: 0.8 + i * 0.1 }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: '6px',
-                      background: 'rgba(14,165,233,0.1)',
+                      background: 'rgba(8,145,178,0.08)',
                       borderRadius: '6px', padding: '5px 8px',
                     }}
                   >
                     <div style={{
                       width: '6px', height: '6px', borderRadius: '50%',
-                      background: `hsl(${190 + i * 15}, 80%, 55%)`,
-                      boxShadow: `0 0 6px hsl(${190 + i * 15}, 80%, 55%)`,
+                      background: `hsl(${180 + i * 12}, 75%, 45%)`,
+                      boxShadow: `0 0 6px hsl(${180 + i * 12}, 75%, 45%)`,
                     }} />
-                    <span style={{ color: '#1e293b', fontSize: '10px', fontWeight: 600 }}>{stage}</span>
+                    <span style={{ color: '#164E63', fontSize: '10px', fontWeight: 600 }}>{stage}</span>
                     <div style={{ marginLeft: 'auto' }}>
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <circle cx="6" cy="6" r="5" fill="#4ade80" opacity="0.2" />
-                        <path d="M3.5 6L5 7.5L8.5 4" stroke="#4ade80" strokeWidth="1.5" strokeLinecap="round" />
+                        <circle cx="6" cy="6" r="5" fill="#22C55E" opacity="0.2" />
+                        <path d="M3.5 6L5 7.5L8.5 4" stroke="#22C55E" strokeWidth="1.5" strokeLinecap="round" />
                       </svg>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              {/* SmartRO badge */}
+              {/* Brand badge */}
               <div style={{
-                marginTop: '16px', textAlign: 'center',
-                fontFamily: 'Poppins, sans-serif', fontWeight: 700,
-                fontSize: '16px', color: '#0369a1', letterSpacing: '1px',
+                marginTop: '14px', textAlign: 'center',
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 800,
+                fontSize: '14px', color: '#155E75', letterSpacing: '0.5px',
               }}>
-                Smart<span style={{ color: '#0ea5e9' }}>RO</span>
+                Aqua <span style={{ color: '#0891B2' }}>Imperial</span>
               </div>
 
               {/* Water tap */}
-              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
                 <div style={{
-                  width: '30px', height: '20px',
+                  width: '28px', height: '18px',
                   background: 'linear-gradient(180deg, #94a3b8, #64748b)',
                   borderRadius: '4px 4px 2px 2px',
                   position: 'relative',
                 }}>
                   <motion.div
-                    animate={{ height: ['0px', '25px', '0px'] }}
+                    animate={{ height: ['0px', '22px', '0px'] }}
                     transition={{ duration: 2, repeat: Infinity, delay: 1 }}
                     style={{
-                      position: 'absolute',
-                      bottom: '-25px',
-                      left: '50%',
-                      transform: 'translateX(-50%)',
+                      position: 'absolute', bottom: '-22px', left: '50%', transform: 'translateX(-50%)',
                       width: '4px',
-                      background: 'linear-gradient(180deg, #7dd3fc, #0284c7)',
+                      background: 'linear-gradient(180deg, #67E8F9, #0891B2)',
                       borderRadius: '2px',
                     }}
                   />
@@ -443,26 +407,23 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Water pool */}
+            {/* Shadow pool */}
             <motion.div
               animate={{ scaleX: [1, 1.05, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
               style={{
-                width: '180px',
-                height: '20px',
-                background: 'radial-gradient(ellipse at 50% 50%, rgba(14,165,233,0.6) 0%, transparent 70%)',
-                borderRadius: '50%',
-                margin: '0 auto',
-                filter: 'blur(8px)',
+                width: '170px', height: '18px',
+                background: 'radial-gradient(ellipse at 50% 50%, rgba(8,145,178,0.5) 0%, transparent 70%)',
+                borderRadius: '50%', margin: '0 auto', filter: 'blur(8px)',
               }}
             />
           </motion.div>
 
-          {/* Floating mini badges */}
+          {/* Floating badges */}
           {[
-            { text: 'WiFi Connected', icon: '📶', top: '5%', right: '-10%' },
-            { text: '99.9% Pure', icon: '✓', bottom: '20%', left: '-15%' },
-            { text: 'BIS Certified', icon: '🛡', top: '40%', right: '-20%' },
+            { text: 'IoT Connected', top: '5%', right: '-10%' },
+            { text: '99.9% Pure', bottom: '20%', left: '-18%' },
+            { text: 'BIS Certified', top: '40%', right: '-22%' },
           ].map((badge) => (
             <motion.div
               key={badge.text}
@@ -472,16 +433,19 @@ export default function Hero() {
               style={{
                 position: 'absolute',
                 ...Object.fromEntries(['top','bottom','left','right'].filter(k => badge[k]).map(k => [k, badge[k]])),
-                background: 'rgba(12,26,46,0.9)',
-                border: '1px solid rgba(56,189,248,0.4)',
-                borderRadius: '20px',
+                background: 'rgba(15,23,42,0.85)',
+                border: '1px solid rgba(34,211,238,0.3)',
+                borderRadius: '12px',
                 padding: '8px 14px',
-                display: 'flex', alignItems: 'center', gap: '6px',
+                display: 'flex', alignItems: 'center', gap: '8px',
                 backdropFilter: 'blur(10px)',
                 whiteSpace: 'nowrap',
               }}
             >
-              <span style={{ fontSize: '14px' }}>{badge.icon}</span>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <circle cx="7" cy="7" r="6" fill="#22C55E" opacity="0.2"/>
+                <path d="M4 7L6 9L10 5" stroke="#22C55E" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
               <span style={{ color: 'white', fontSize: '11px', fontWeight: 600 }}>{badge.text}</span>
             </motion.div>
           ))}
@@ -489,9 +453,9 @@ export default function Hero() {
       </div>
 
       <style>{`
-        @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 8px 30px rgba(14,165,233,0.4); }
-          50% { box-shadow: 0 8px 50px rgba(14,165,233,0.8), 0 0 80px rgba(14,165,233,0.2); }
+        @keyframes pulseSmall {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.4; transform: scale(1.5); }
         }
         @media (max-width: 768px) {
           .hero-grid {
@@ -507,18 +471,4 @@ export default function Hero() {
       `}</style>
     </section>
   );
-}
-
-function CounterDisplay({ target }) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    let start = 0;
-    const timer = setInterval(() => {
-      start += 1;
-      if (start >= target) { setCount(target); clearInterval(timer); }
-      else setCount(start);
-    }, 60);
-    return () => clearInterval(timer);
-  }, [target]);
-  return <>{count}</>;
 }

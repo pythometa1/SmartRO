@@ -1,80 +1,134 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+
+const comparisonData = [
+  {
+    feature: 'Monthly Cost',
+    waterCan: '₹800–1200',
+    otherPurifier: '₹1500+ EMI',
+    aquaImperial: '₹349/mo',
+    highlight: true,
+  },
+  {
+    feature: 'Upfront Cost',
+    waterCan: 'None',
+    otherPurifier: '₹8,000–25,000',
+    aquaImperial: '₹0',
+    highlight: true,
+  },
+  {
+    feature: 'Maintenance',
+    waterCan: 'N/A',
+    otherPurifier: '₹2,000–4,000/yr',
+    aquaImperial: 'Free for Life',
+    highlight: true,
+  },
+  {
+    feature: 'Water Purity',
+    waterCan: 'Inconsistent',
+    otherPurifier: 'Good',
+    aquaImperial: '99.9% Pure',
+    highlight: false,
+  },
+  {
+    feature: 'Installation',
+    waterCan: 'None needed',
+    otherPurifier: '₹500–1500',
+    aquaImperial: 'Free',
+    highlight: false,
+  },
+  {
+    feature: 'Filter Replacement',
+    waterCan: 'N/A',
+    otherPurifier: 'Self-arranged',
+    aquaImperial: 'Auto-scheduled',
+    highlight: false,
+  },
+  {
+    feature: 'Smart Monitoring',
+    waterCan: false,
+    otherPurifier: false,
+    aquaImperial: true,
+    isBool: true,
+  },
+  {
+    feature: '24/7 Support',
+    waterCan: false,
+    otherPurifier: false,
+    aquaImperial: true,
+    isBool: true,
+  },
+];
 
 const features = [
   {
     icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <path d="M18 2C18 2 6 14 6 22C6 28.627 11.373 34 18 34C24.627 34 30 28.627 30 22C30 14 18 2 18 2Z" fill="url(#f1)" />
-        <path d="M12 20C12 20 14 17 18 16" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-        <defs><linearGradient id="f1" x1="18" y1="2" x2="18" y2="34" gradientUnits="userSpaceOnUse"><stop stopColor="#38bdf8"/><stop offset="1" stopColor="#0284c7"/></linearGradient></defs>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M16 2C16 2 6 12 6 19C6 24.523 10.477 29 16 29C21.523 29 26 24.523 26 19C26 12 16 2 16 2Z" fill="url(#feat1)"/>
+        <path d="M11 17C11 17 13 14 16 13" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.6"/>
+        <defs><linearGradient id="feat1" x1="16" y1="2" x2="16" y2="29"><stop stopColor="#22D3EE"/><stop offset="1" stopColor="#0891B2"/></linearGradient></defs>
       </svg>
     ),
     title: '7-Stage Purification',
     desc: 'Sediment, carbon, RO membrane, UV sterilization, UF, and mineral boost — every sip is medically pure.',
-    color: '#0ea5e9',
   },
   {
     icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <rect x="4" y="8" width="28" height="20" rx="4" fill="url(#f2)" />
-        <rect x="8" y="12" width="8" height="12" rx="2" fill="white" opacity="0.9" />
-        <circle cx="24" cy="18" r="4" fill="white" opacity="0.9" />
-        <path d="M22 18L24 20L26 16" stroke="#0ea5e9" strokeWidth="1.5" strokeLinecap="round" />
-        <defs><linearGradient id="f2" x1="4" y1="8" x2="32" y2="28" gradientUnits="userSpaceOnUse"><stop stopColor="#0369a1"/><stop offset="1" stopColor="#0ea5e9"/></linearGradient></defs>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect x="4" y="7" width="24" height="18" rx="4" fill="url(#feat2)"/>
+        <rect x="8" y="11" width="7" height="10" rx="1.5" fill="white" opacity="0.9"/>
+        <circle cx="22" cy="16" r="3.5" fill="white" opacity="0.9"/>
+        <path d="M20.5 16L22 17.5L24 14.5" stroke="#0891B2" strokeWidth="1.3" strokeLinecap="round"/>
+        <defs><linearGradient id="feat2" x1="4" y1="7" x2="28" y2="25"><stop stopColor="#155E75"/><stop offset="1" stopColor="#0891B2"/></linearGradient></defs>
       </svg>
     ),
     title: 'Smart TDS Monitor',
     desc: 'Real-time digital display shows live TDS, pH levels, and water quality score. Know what you drink.',
-    color: '#06b6d4',
   },
   {
     icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <circle cx="18" cy="18" r="14" fill="url(#f3)" />
-        <path d="M12 18C12 18 15 12 18 18C21 24 24 18 24 18" stroke="white" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-        <defs><linearGradient id="f3" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#06b6d4"/><stop offset="1" stopColor="#0369a1"/></linearGradient></defs>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="12" fill="url(#feat3)"/>
+        <path d="M10 16C10 16 13 10 16 16C19 22 22 16 22 16" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
+        <defs><linearGradient id="feat3" x1="4" y1="4" x2="28" y2="28"><stop stopColor="#22D3EE"/><stop offset="1" stopColor="#155E75"/></linearGradient></defs>
       </svg>
     ),
-    title: 'WiFi & App Control',
-    desc: 'Monitor filter life, water usage, and quality from your smartphone via SmartRO app. Alerts & reminders.',
-    color: '#0ea5e9',
+    title: 'IoT & App Control',
+    desc: 'Monitor filter life, water usage, and quality from your smartphone. Get alerts & reminders instantly.',
   },
   {
     icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <path d="M18 4L4 12V24L18 32L32 24V12L18 4Z" fill="url(#f4)" />
-        <path d="M14 18L16.5 20.5L22 15" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-        <defs><linearGradient id="f4" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#0ea5e9"/><stop offset="1" stopColor="#0369a1"/></linearGradient></defs>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M16 3L3 10V22L16 29L29 22V10L16 3Z" fill="url(#feat4)"/>
+        <path d="M12 16L14.5 18.5L20 13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <defs><linearGradient id="feat4" x1="3" y1="3" x2="29" y2="29"><stop stopColor="#0891B2"/><stop offset="1" stopColor="#155E75"/></linearGradient></defs>
       </svg>
     ),
     title: 'BIS & WHO Certified',
     desc: 'Fully certified by Bureau of Indian Standards and WHO water quality standards. Safe for infants.',
-    color: '#38bdf8',
   },
   {
     icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <rect x="6" y="6" width="24" height="24" rx="12" fill="url(#f5)" />
-        <path d="M18 12V18L22 20" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-        <defs><linearGradient id="f5" x1="6" y1="6" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop stopColor="#38bdf8"/><stop offset="1" stopColor="#0284c7"/></linearGradient></defs>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="12" fill="url(#feat5)"/>
+        <path d="M16 10V16L20 18" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <defs><linearGradient id="feat5" x1="4" y1="4" x2="28" y2="28"><stop stopColor="#67E8F9"/><stop offset="1" stopColor="#0E7490"/></linearGradient></defs>
       </svg>
     ),
     title: 'Auto Filter Alerts',
     desc: 'Smart sensor tracks filter usage and sends timely replacement reminders — no guesswork needed.',
-    color: '#0ea5e9',
   },
   {
     icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <path d="M6 28L18 8L30 28H6Z" fill="url(#f6)" />
-        <path d="M16 22H20M18 16V22" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-        <defs><linearGradient id="f6" x1="6" y1="8" x2="30" y2="28" gradientUnits="userSpaceOnUse"><stop stopColor="#0ea5e9"/><stop offset="1" stopColor="#06b6d4"/></linearGradient></defs>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect x="5" y="5" width="22" height="22" rx="6" fill="url(#feat6)"/>
+        <path d="M12 16H20M16 12V20" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <defs><linearGradient id="feat6" x1="5" y1="5" x2="27" y2="27"><stop stopColor="#0891B2"/><stop offset="1" stopColor="#22D3EE"/></linearGradient></defs>
       </svg>
     ),
     title: '24×7 Support',
     desc: 'Dedicated service engineers, free installation, and annual maintenance. We\'re always just a call away.',
-    color: '#06b6d4',
   },
 ];
 
@@ -92,17 +146,17 @@ function FeatureCard({ feature, index }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         background: hovered
-          ? 'linear-gradient(135deg, #0c1a2e, #0a2540)'
-          : 'linear-gradient(135deg, #f8faff, #eef6ff)',
+          ? 'linear-gradient(135deg, #0F172A, #164E63)'
+          : '#ffffff',
         borderRadius: '20px',
         padding: '32px 28px',
-        border: `1px solid ${hovered ? 'rgba(14,165,233,0.4)' : 'rgba(14,165,233,0.12)'}`,
-        cursor: 'default',
-        transition: 'all 0.35s ease',
+        border: `1px solid ${hovered ? 'rgba(8,145,178,0.4)' : 'rgba(8,145,178,0.1)'}`,
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
         boxShadow: hovered
-          ? '0 20px 60px rgba(14,165,233,0.2), 0 0 0 1px rgba(14,165,233,0.3)'
-          : '0 4px 20px rgba(0,0,0,0.05)',
-        transform: hovered ? 'translateY(-8px)' : 'translateY(0)',
+          ? '0 20px 50px rgba(8,145,178,0.2), 0 0 0 1px rgba(8,145,178,0.3)'
+          : '0 2px 16px rgba(0,0,0,0.04)',
+        transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -110,32 +164,32 @@ function FeatureCard({ feature, index }) {
       {hovered && (
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'radial-gradient(circle at 50% 0%, rgba(14,165,233,0.15) 0%, transparent 60%)',
+          background: 'radial-gradient(circle at 50% 0%, rgba(34,211,238,0.12) 0%, transparent 60%)',
         }} />
       )}
       <div style={{
-        width: '64px', height: '64px',
-        borderRadius: '16px',
-        background: hovered ? 'rgba(14,165,233,0.15)' : 'rgba(14,165,233,0.08)',
+        width: '56px', height: '56px',
+        borderRadius: '14px',
+        background: hovered ? 'rgba(34,211,238,0.15)' : 'rgba(8,145,178,0.06)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        marginBottom: '20px',
-        border: `1px solid ${hovered ? 'rgba(56,189,248,0.4)' : 'rgba(14,165,233,0.15)'}`,
+        marginBottom: '18px',
+        border: `1px solid ${hovered ? 'rgba(34,211,238,0.3)' : 'rgba(8,145,178,0.1)'}`,
         transition: 'all 0.3s',
       }}>
         {feature.icon}
       </div>
       <h3 style={{
-        fontFamily: 'Poppins, sans-serif',
-        fontSize: '18px',
+        fontFamily: "'DM Sans', sans-serif",
+        fontSize: '17px',
         fontWeight: 700,
-        color: hovered ? '#ffffff' : '#0c1a2e',
-        marginBottom: '12px',
+        color: hovered ? '#ffffff' : '#0F172A',
+        marginBottom: '10px',
         transition: 'color 0.3s',
       }}>
         {feature.title}
       </h3>
       <p style={{
-        color: hovered ? 'rgba(255,255,255,0.7)' : '#64748b',
+        color: hovered ? 'rgba(255,255,255,0.7)' : '#64748B',
         fontSize: '14px',
         lineHeight: 1.7,
         transition: 'color 0.3s',
@@ -146,10 +200,27 @@ function FeatureCard({ feature, index }) {
   );
 }
 
-import { useState } from 'react';
+function CheckIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="9" r="8" fill="#22C55E" opacity="0.15"/>
+      <path d="M5.5 9L7.5 11L12.5 6" stroke="#22C55E" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function CrossIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="9" r="8" fill="#EF4444" opacity="0.1"/>
+      <path d="M6.5 6.5L11.5 11.5M11.5 6.5L6.5 11.5" stroke="#EF4444" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  );
+}
 
 export default function Features() {
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const [compRef, compInView] = useInView({ threshold: 0.1, triggerOnce: true });
 
   return (
     <section id="features" style={{ padding: '100px 0', background: '#ffffff', position: 'relative', overflow: 'hidden' }}>
@@ -157,11 +228,12 @@ export default function Features() {
       <div style={{
         position: 'absolute', top: '-100px', right: '-100px',
         width: '500px', height: '500px', borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(14,165,233,0.05) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(8,145,178,0.04) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+        {/* Section Header */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
@@ -171,34 +243,146 @@ export default function Features() {
         >
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '8px',
-            background: 'rgba(14,165,233,0.08)', border: '1px solid rgba(14,165,233,0.2)',
+            background: 'rgba(8,145,178,0.06)', border: '1px solid rgba(8,145,178,0.15)',
             borderRadius: '25px', padding: '6px 16px', marginBottom: '16px',
           }}>
-            <span style={{ color: '#0ea5e9', fontSize: '13px', fontWeight: 600 }}>Why SmartRO</span>
+            <span style={{ color: '#0891B2', fontSize: '13px', fontWeight: 600 }}>The Aqua Imperial Advantage</span>
           </div>
           <h2 style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: 'clamp(28px, 4vw, 42px)',
             fontWeight: 800,
-            color: '#0c1a2e',
+            color: '#0F172A',
             marginBottom: '16px',
             letterSpacing: '-0.5px',
           }}>
-            Technology That Cares for Your Health
+            Next-Gen Water Purification at Best Costs
           </h2>
-          <p style={{ color: '#64748b', fontSize: '17px', maxWidth: '560px', margin: '0 auto', lineHeight: 1.7 }}>
-            SmartRO combines cutting-edge filtration with intelligent monitoring — giving your family the purest water possible.
+          <p style={{ color: '#64748B', fontSize: '17px', maxWidth: '560px', margin: '0 auto', lineHeight: 1.7 }}>
+            Experience the smartest water purification solutions with Aqua Imperial. 
+            See how we compare against traditional options.
           </p>
         </motion.div>
 
+        {/* Comparison Table */}
+        <motion.div
+          ref={compRef}
+          initial={{ opacity: 0, y: 40 }}
+          animate={compInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7 }}
+          style={{
+            background: '#ffffff',
+            borderRadius: '24px',
+            border: '1px solid rgba(8,145,178,0.12)',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.06)',
+            overflow: 'hidden',
+            marginBottom: '80px',
+          }}
+        >
+          {/* Table header */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1.5fr 1fr 1fr 1fr',
+            gap: '0',
+            background: '#F8FFFE',
+            borderBottom: '1px solid rgba(8,145,178,0.1)',
+          }}
+            className="comparison-grid"
+          >
+            <div style={{ padding: '20px 28px', fontWeight: 700, color: '#334155', fontSize: '14px' }}>Feature</div>
+            <div style={{ padding: '20px 20px', textAlign: 'center' }}>
+              <div style={{ fontWeight: 700, color: '#94A3B8', fontSize: '13px' }}>Water Can</div>
+            </div>
+            <div style={{ padding: '20px 20px', textAlign: 'center' }}>
+              <div style={{ fontWeight: 700, color: '#94A3B8', fontSize: '13px' }}>Other Purifiers</div>
+            </div>
+            <div style={{ padding: '20px 20px', textAlign: 'center', background: 'rgba(8,145,178,0.06)' }}>
+              <div style={{ fontWeight: 800, color: '#0891B2', fontSize: '13px' }}>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ verticalAlign: 'middle', marginRight: '4px' }}>
+                  <path d="M7 1C7 1 3 6 3 9C3 11.761 4.791 14 7 14C9.209 14 11 11.761 11 9C11 6 7 1 7 1Z" fill="#0891B2"/>
+                </svg>
+                Aqua Imperial
+              </div>
+            </div>
+          </div>
+
+          {/* Table rows */}
+          {comparisonData.map((row, i) => (
+            <div key={row.feature} style={{
+              display: 'grid',
+              gridTemplateColumns: '1.5fr 1fr 1fr 1fr',
+              gap: '0',
+              borderBottom: i < comparisonData.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none',
+              transition: 'background 0.2s',
+            }}
+              className="comparison-grid"
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(8,145,178,0.02)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+            >
+              <div style={{ padding: '16px 28px', fontWeight: 600, color: '#334155', fontSize: '14px', display: 'flex', alignItems: 'center' }}>
+                {row.feature}
+              </div>
+              <div style={{ padding: '16px 20px', textAlign: 'center', color: '#94A3B8', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {row.isBool ? (row.waterCan ? <CheckIcon /> : <CrossIcon />) : row.waterCan}
+              </div>
+              <div style={{ padding: '16px 20px', textAlign: 'center', color: '#94A3B8', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {row.isBool ? (row.otherPurifier ? <CheckIcon /> : <CrossIcon />) : row.otherPurifier}
+              </div>
+              <div style={{
+                padding: '16px 20px', textAlign: 'center',
+                background: 'rgba(8,145,178,0.03)',
+                color: row.highlight ? '#0891B2' : '#164E63',
+                fontWeight: row.highlight ? 700 : 600,
+                fontSize: '13px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                {row.isBool ? (row.aquaImperial ? <CheckIcon /> : <CrossIcon />) : row.aquaImperial}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Feature cards header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          style={{ textAlign: 'center', marginBottom: '48px' }}
+        >
+          <h3 style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 'clamp(22px, 3vw, 32px)',
+            fontWeight: 800,
+            color: '#0F172A',
+            marginBottom: '12px',
+          }}>
+            Technology That Cares for Your Health
+          </h3>
+          <p style={{ color: '#64748B', fontSize: '16px', maxWidth: '500px', margin: '0 auto', lineHeight: 1.7 }}>
+            Aqua Imperial combines cutting-edge filtration with intelligent monitoring.
+          </p>
+        </motion.div>
+
+        {/* Feature cards */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '24px',
+          gap: '20px',
         }}>
           {features.map((f, i) => <FeatureCard key={f.title} feature={f} index={i} />)}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .comparison-grid { grid-template-columns: 1.2fr 0.8fr 0.8fr 1fr !important; font-size: 12px !important; }
+        }
+        @media (max-width: 480px) {
+          .comparison-grid { grid-template-columns: 1fr 1fr !important; }
+          .comparison-grid > div:nth-child(4n+2),
+          .comparison-grid > div:nth-child(4n+3) { display: none !important; }
+        }
+      `}</style>
     </section>
   );
 }

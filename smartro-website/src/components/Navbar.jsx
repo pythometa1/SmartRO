@@ -5,7 +5,7 @@ const navLinks = [
   { label: 'Home', href: '#home' },
   { label: 'Features', href: '#features' },
   { label: 'How It Works', href: '#how-it-works' },
-  { label: 'Products', href: '#products' },
+  { label: 'Plans', href: '#products' },
   { label: 'Testimonials', href: '#testimonials' },
   { label: 'Contact', href: '#contact' },
 ];
@@ -40,13 +40,13 @@ export default function Navbar() {
           left: 0,
           right: 0,
           zIndex: 1000,
-          padding: scrolled ? '10px 0' : '18px 0',
+          padding: scrolled ? '8px 0' : '16px 0',
           background: scrolled
-            ? 'rgba(12, 26, 46, 0.97)'
-            : 'linear-gradient(180deg, rgba(12,26,46,0.9) 0%, transparent 100%)',
+            ? 'rgba(255, 255, 255, 0.95)'
+            : 'transparent',
           backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          boxShadow: scrolled ? '0 4px 30px rgba(0,0,0,0.3)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(14,165,233,0.2)' : 'none',
+          boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.08)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(8,145,178,0.1)' : 'none',
           transition: 'all 0.3s ease',
         }}
       >
@@ -60,18 +60,16 @@ export default function Navbar() {
         }}>
           {/* Logo */}
           <motion.div
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.03 }}
             style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
             onClick={() => handleNavClick('#home')}
           >
             <div style={{
               width: '42px', height: '42px',
-              background: 'linear-gradient(135deg, #0ea5e9, #06b6d4)',
-              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #0891B2, #22D3EE)',
+              borderRadius: '12px',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(14,165,233,0.5)',
-              position: 'relative',
-              overflow: 'hidden',
+              boxShadow: '0 4px 14px rgba(8,145,178,0.3)',
             }}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M12 2C12 2 5 10 5 15C5 18.866 8.134 22 12 22C15.866 22 19 18.866 19 15C19 10 12 2 12 2Z" fill="white" />
@@ -80,17 +78,26 @@ export default function Navbar() {
             </div>
             <div>
               <div style={{
-                fontFamily: 'Poppins, sans-serif',
+                fontFamily: "'DM Sans', sans-serif",
                 fontWeight: 800,
-                fontSize: '22px',
-                color: '#ffffff',
+                fontSize: '20px',
+                color: scrolled ? '#0F172A' : '#ffffff',
                 letterSpacing: '-0.5px',
-                lineHeight: 1,
+                lineHeight: 1.1,
+                transition: 'color 0.3s',
               }}>
-                Smart<span style={{ color: '#38bdf8' }}>RO</span>
+                Aqua <span style={{ color: '#0891B2' }}>Imperial</span>
               </div>
-              <div style={{ fontSize: '9px', color: 'rgba(56,189,248,0.8)', letterSpacing: '2px', textTransform: 'uppercase', lineHeight: 1 }}>
-                Pure Water
+              <div style={{
+                fontSize: '8px',
+                color: scrolled ? 'rgba(8,145,178,0.8)' : 'rgba(255,255,255,0.7)',
+                letterSpacing: '2.5px',
+                textTransform: 'uppercase',
+                lineHeight: 1,
+                fontWeight: 500,
+                transition: 'color 0.3s',
+              }}>
+                Pure Water Solutions
               </div>
             </div>
           </motion.div>
@@ -98,7 +105,7 @@ export default function Navbar() {
           {/* Desktop Nav */}
           <ul style={{
             display: 'flex',
-            gap: '8px',
+            gap: '4px',
             listStyle: 'none',
             alignItems: 'center',
           }}
@@ -112,20 +119,30 @@ export default function Navbar() {
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
-                    color: activeLink === link.href ? '#38bdf8' : 'rgba(255,255,255,0.85)',
-                    fontFamily: 'Poppins, sans-serif',
+                    color: activeLink === link.href
+                      ? '#0891B2'
+                      : scrolled ? '#334155' : 'rgba(255,255,255,0.9)',
+                    fontFamily: "'DM Sans', sans-serif",
                     fontSize: '14px',
-                    fontWeight: activeLink === link.href ? 600 : 400,
+                    fontWeight: activeLink === link.href ? 600 : 500,
                     padding: '8px 14px',
                     borderRadius: '8px',
-                    background: activeLink === link.href ? 'rgba(14,165,233,0.15)' : 'transparent',
+                    background: activeLink === link.href
+                      ? (scrolled ? 'rgba(8,145,178,0.08)' : 'rgba(255,255,255,0.12)')
+                      : 'transparent',
                     transition: 'all 0.2s',
-                    position: 'relative',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#38bdf8'; e.currentTarget.style.background = 'rgba(14,165,233,0.1)'; }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.color = '#0891B2';
+                    e.currentTarget.style.background = scrolled ? 'rgba(8,145,178,0.06)' : 'rgba(255,255,255,0.1)';
+                  }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.color = activeLink === link.href ? '#38bdf8' : 'rgba(255,255,255,0.85)';
-                    e.currentTarget.style.background = activeLink === link.href ? 'rgba(14,165,233,0.15)' : 'transparent';
+                    e.currentTarget.style.color = activeLink === link.href
+                      ? '#0891B2'
+                      : scrolled ? '#334155' : 'rgba(255,255,255,0.9)';
+                    e.currentTarget.style.background = activeLink === link.href
+                      ? (scrolled ? 'rgba(8,145,178,0.08)' : 'rgba(255,255,255,0.12)')
+                      : 'transparent';
                   }}
                 >
                   {link.label}
@@ -136,33 +153,34 @@ export default function Navbar() {
 
           {/* CTA Button Desktop */}
           <motion.button
-            whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(14,165,233,0.6)' }}
+            whileHover={{ scale: 1.05, boxShadow: '0 8px 28px rgba(34,197,94,0.5)' }}
             whileTap={{ scale: 0.95 }}
             onClick={() => handleNavClick('#contact')}
             style={{
-              background: 'linear-gradient(135deg, #0ea5e9, #06b6d4)',
+              background: 'linear-gradient(135deg, #22C55E, #16A34A)',
               color: 'white',
               border: 'none',
               padding: '10px 24px',
-              borderRadius: '25px',
-              fontFamily: 'Poppins, sans-serif',
-              fontWeight: 600,
+              borderRadius: '10px',
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 700,
               fontSize: '14px',
               cursor: 'pointer',
-              boxShadow: '0 4px 20px rgba(14,165,233,0.4)',
+              boxShadow: '0 4px 16px rgba(34,197,94,0.35)',
               whiteSpace: 'nowrap',
             }}
             className="desktop-cta"
           >
-            Get Free Demo
+            Subscribe Now
           </motion.button>
 
           {/* Hamburger */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
             style={{
               background: 'none',
-              border: '1.5px solid rgba(14,165,233,0.4)',
+              border: `1.5px solid ${scrolled ? 'rgba(8,145,178,0.3)' : 'rgba(255,255,255,0.3)'}`,
               borderRadius: '8px',
               padding: '8px',
               cursor: 'pointer',
@@ -170,13 +188,14 @@ export default function Navbar() {
               flexDirection: 'column',
               gap: '5px',
               alignItems: 'center',
+              transition: 'border-color 0.3s',
             }}
             className="hamburger"
           >
             {[0, 1, 2].map(i => (
               <span key={i} style={{
                 width: '22px', height: '2px',
-                background: '#38bdf8',
+                background: scrolled ? '#0891B2' : '#fff',
                 borderRadius: '2px',
                 transition: 'all 0.3s',
                 transform: menuOpen
@@ -205,10 +224,11 @@ export default function Navbar() {
               left: 0,
               right: 0,
               zIndex: 999,
-              background: 'rgba(12, 26, 46, 0.98)',
+              background: 'rgba(255, 255, 255, 0.98)',
               backdropFilter: 'blur(20px)',
-              borderBottom: '1px solid rgba(14,165,233,0.2)',
+              borderBottom: '1px solid rgba(8,145,178,0.1)',
               padding: '20px 24px 30px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
             }}
           >
             {navLinks.map((link, i) => (
@@ -226,13 +246,13 @@ export default function Navbar() {
                     textAlign: 'left',
                     background: 'none',
                     border: 'none',
-                    color: activeLink === link.href ? '#38bdf8' : 'rgba(255,255,255,0.85)',
-                    fontFamily: 'Poppins, sans-serif',
+                    color: activeLink === link.href ? '#0891B2' : '#334155',
+                    fontFamily: "'DM Sans', sans-serif",
                     fontSize: '16px',
                     fontWeight: 500,
                     padding: '14px 0',
                     cursor: 'pointer',
-                    borderBottom: '1px solid rgba(255,255,255,0.06)',
+                    borderBottom: '1px solid rgba(0,0,0,0.05)',
                   }}
                 >
                   {link.label}
@@ -247,18 +267,19 @@ export default function Navbar() {
               style={{
                 marginTop: '20px',
                 width: '100%',
-                background: 'linear-gradient(135deg, #0ea5e9, #06b6d4)',
+                background: 'linear-gradient(135deg, #22C55E, #16A34A)',
                 color: 'white',
                 border: 'none',
                 padding: '14px',
                 borderRadius: '12px',
-                fontFamily: 'Poppins, sans-serif',
-                fontWeight: 600,
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 700,
                 fontSize: '15px',
                 cursor: 'pointer',
+                boxShadow: '0 4px 16px rgba(34,197,94,0.3)',
               }}
             >
-              Get Free Demo
+              Subscribe Now
             </motion.button>
           </motion.div>
         )}
