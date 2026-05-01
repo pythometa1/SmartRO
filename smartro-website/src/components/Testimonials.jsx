@@ -117,7 +117,7 @@ export default function Testimonials() {
             color: '#0F172A',
             marginBottom: '16px',
           }}>
-            A Thriving Community of Happy Families
+            Real Stories from Real Families
           </h2>
           <p style={{ color: '#64748B', fontSize: '17px', maxWidth: '520px', margin: '0 auto', lineHeight: 1.7 }}>
             Our happy customers understand the impact of pure drinking water on health and wellness.
@@ -211,55 +211,6 @@ export default function Testimonials() {
               />
             ))}
           </div>
-        </div>
-
-        {/* Mini review grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-          gap: '16px',
-        }}>
-          {testimonials.slice(0, 3).map((t, i) => (
-            <motion.div
-              key={t.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 + 0.3 }}
-              onClick={() => setCurrent(i)}
-              style={{
-                background: current === i ? 'linear-gradient(135deg, #0F172A, #164E63)' : '#ffffff',
-                borderRadius: '16px',
-                padding: '24px',
-                border: `1px solid ${current === i ? 'rgba(34,211,238,0.3)' : 'rgba(8,145,178,0.08)'}`,
-                cursor: 'pointer',
-                transition: 'all 0.3s',
-                boxShadow: current === i ? '0 8px 24px rgba(8,145,178,0.15)' : '0 1px 4px rgba(0,0,0,0.03)',
-              }}
-            >
-              <StarRating rating={t.rating} />
-              <p style={{
-                color: current === i ? 'rgba(255,255,255,0.75)' : '#475569',
-                fontSize: '13px', lineHeight: 1.6,
-                marginTop: '10px', marginBottom: '14px',
-              }}>
-                "{t.text.slice(0, 80)}..."
-              </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{
-                  width: '36px', height: '36px', borderRadius: '10px',
-                  background: `linear-gradient(135deg, ${t.color}, #155E75)`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: 'white', fontWeight: 700, fontSize: '12px',
-                }}>
-                  {t.avatar}
-                </div>
-                <div>
-                  <div style={{ fontWeight: 600, color: current === i ? 'white' : '#0F172A', fontSize: '13px' }}>{t.name}</div>
-                  <div style={{ color: current === i ? 'rgba(255,255,255,0.5)' : '#94A3B8', fontSize: '11px' }}>{t.location}</div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
         </div>
       </div>
     </section>

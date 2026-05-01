@@ -56,6 +56,11 @@ export default function EnquiryPopup() {
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setLoading(true);
+    const submittedAt = new Date().toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: true,
+    }) + ' IST';
     try {
       const res = await fetch(FORM_ENDPOINT, {
         method: 'POST',
@@ -69,6 +74,7 @@ export default function EnquiryPopup() {
           Phone: `+91 ${data.phone}`,
           City: data.city,
           Source: 'Website popup',
+          'Submitted At': submittedAt,
         }),
       });
       const json = await res.json().catch(() => ({}));

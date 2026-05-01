@@ -32,6 +32,11 @@ export default function Contact() {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setLoading(true);
+    const submittedAt = new Date().toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: true,
+    }) + ' IST';
     try {
       const res = await fetch(FORM_ENDPOINT, {
         method: 'POST',
@@ -50,6 +55,7 @@ export default function Contact() {
           'Heard From': formData.source || '—',
           Message: formData.message || '—',
           Source: 'Website contact form',
+          'Submitted At': submittedAt,
         }),
       });
       const json = await res.json().catch(() => ({}));
